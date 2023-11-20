@@ -1,0 +1,6 @@
+.box-grid {
+    height: auto;
+    display: flex;
+    flex-wrap: wrap;
+    width: 50%;
+}
