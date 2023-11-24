@@ -15,12 +15,11 @@ const randomIdx = (arr) => {
   return arr[idx];
 };
 
-export default function BoxGrid() {
-  // const boxes = [];
-  // cost numBoxres = 10;
+export default function BoxGrid({numColors, numBoxes}) {
 
-  const numBoxes = 6;
-  const numColors = 5;
+
+  // const numBoxes = 20;
+  // const numColors = 2;
 
   const generateColors = () => {
     let colorsArr = [];
@@ -66,9 +65,10 @@ export default function BoxGrid() {
         let newColor = randomIdx(colorsArr);
 
       return prevBoxArr.map((box) => {
-        if(newColor === box.background)  newColor = randomIdx(colorsArr); 
+        
             // ensures box always chamges to new color and it doesn't pick the previous color
         if (id === box.id) {
+          if(newColor === box.background)  newColor = randomIdx(colorsArr); 
           return { ...box, background:  newColor };
         } else {
           return box;
