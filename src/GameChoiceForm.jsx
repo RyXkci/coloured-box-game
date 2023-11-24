@@ -69,8 +69,9 @@ export default function GameChoiceForm() {
       </div>
     </>
     : <BoxGrid
-    numColors={inputData.numColors}
-    numBoxes={inputData.numBoxes} />
+       numColors={inputData.numColors}
+       numBoxes={inputData.numBoxes}
+     />
 
   );
 }
