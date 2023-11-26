@@ -15,8 +15,18 @@ const randomIdx = (arr) => {
   return arr[idx];
 };
 
+const parseSeconds = (num) => {
+  let minutes = Math.floor(num / 60);
+  let seconds = num % 60;
+  const result = {
+    minutes: minutes,
+    seconds: seconds,
+  };
+  return result;
+};
+
 export default function BoxGrid({ numColors, numBoxes }) {
-  // 
+  //
   // const numBoxes = 5;
   // const numColors = 2;
 
@@ -26,8 +36,8 @@ export default function BoxGrid({ numColors, numBoxes }) {
       colorsArr.push(randomColor());
     }
     return colorsArr;
-  }; //Function to be run on render, generating an array of random colors the amount of numColors. 
-     //saved to state so it doesn't re-run it every time.
+  }; //Function to be run on render, generating an array of random colors the amount of numColors.
+  //saved to state so it doesn't re-run it every time.
 
   const generateBoxes = () => {
     let boxes = [];
@@ -41,7 +51,7 @@ export default function BoxGrid({ numColors, numBoxes }) {
     }
     return boxes;
   }; //Function to be run on render, generating an amount of objects with a random colour
-     // picked from array and saved to state. Each object is a box
+  // picked from array and saved to state. Each object is a box
 
   const [colorsArr, setColorsArr] = useState(generateColors);
   const [boxArr, setBoxArr] = useState(generateBoxes);
@@ -50,16 +60,14 @@ export default function BoxGrid({ numColors, numBoxes }) {
 
   let [time, setTime] = useState(0);
   const countRef = useRef(null);
+  const [parsedTime, setParsedTime] = useState({minutes: '', seconds: ''})
 
-useEffect(() => { 
+  useEffect(() => {
     countRef.current = setInterval(() => {
-      setTime((prevTime) => prevTime +1)
+      setTime((prevTime) => prevTime + 1);
     }, 1000);
-    return () => clearInterval(countRef.current)
-  
-  
-}, []) // Uses ref to store reference to interval to later clear it. It wouldn't clear it otherwise.
-
+    return () => clearInterval(countRef.current);
+  }, []); // Uses ref to store reference to interval to later clear it. It wouldn't clear it otherwise.
 
   useEffect(() => {
     const isGameOver = runValidate();
@@ -67,12 +75,22 @@ useEffect(() => {
       return;
     } else {
       setEndGame((prevEndGame) => !prevEndGame);
-      clearInterval(countRef.current)
+      clearInterval(countRef.current);
+      const newTime = parseSeconds(time);
+      setParsedTime((prevParsedTime) => {
+return {
+  ...prevParsedTime,
+  minutes: newTime.minutes,
+  seconds: newTime.seconds
+}
+return {
+  ...prevParsedTime,
+  newTime
+}
+      })
     }
-  }, boxArr);  // useEffect function to run on every boxArr state update. 
-               //Uses runValidate to check if all boxes have same background color. If they are, the game is over
-
-
+  }, boxArr); // useEffect function to run on every boxArr state update.
+  //Uses runValidate to check if all boxes have same background color. If they are, the game is over
 
   const runValidate = () => {
     return boxArr.every((box) => box.background === boxArr[0].background);
@@ -104,10 +122,15 @@ useEffect(() => {
         />
       ))}
     </div>
-  ) : ( <>
+  ) : (
+    <>
       <h1>You Finished!</h1>
-    <p>It took you {time} seconds!</p>
+      <p>
+        It took you{" "}
+        {parsedTime.minutes === 0
+          ? `${parsedTime.seconds } seconds!`
+          : `${parsedTime.minutes } minutes and ${parsedTime.seconds } seconds!`}
+      </p>
     </>
-
   );
 }
