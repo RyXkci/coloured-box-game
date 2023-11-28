@@ -23,10 +23,13 @@ export default function GameChoiceForm() {
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    setIsSubmitted(true)
+    setIsSubmitted((prevIsSubmitted) => !prevIsSubmitted)
 
   }
 
+  const setGame = () => {
+    setIsSubmitted((prevIsSubmitted) => !prevIsSubmitted)
+  }
   return (
          !isSubmitted ? 
          <>
@@ -71,6 +74,7 @@ export default function GameChoiceForm() {
     : <BoxGrid
        numColors={inputData.numColors}
        numBoxes={inputData.numBoxes}
+       setGame={setGame}
      />
 
   );
