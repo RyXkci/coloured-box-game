@@ -60,7 +60,7 @@ export default function BoxGrid({ numColors, numBoxes }) {
 
   let [time, setTime] = useState(0);
   const countRef = useRef(null);
-  const [parsedTime, setParsedTime] = useState({minutes: '', seconds: ''})
+  const [parsedTime, setParsedTime] = useState({ minutes: "", seconds: "" });
 
   useEffect(() => {
     countRef.current = setInterval(() => {
@@ -78,16 +78,12 @@ export default function BoxGrid({ numColors, numBoxes }) {
       clearInterval(countRef.current);
       const newTime = parseSeconds(time);
       setParsedTime((prevParsedTime) => {
-return {
-  ...prevParsedTime,
-  minutes: newTime.minutes,
-  seconds: newTime.seconds
-}
-return {
-  ...prevParsedTime,
-  newTime
-}
-      })
+        return {
+          ...prevParsedTime,
+          minutes: newTime.minutes,
+          seconds: newTime.seconds,
+        };
+      });
     }
   }, boxArr); // useEffect function to run on every boxArr state update.
   //Uses runValidate to check if all boxes have same background color. If they are, the game is over
@@ -112,6 +108,18 @@ return {
     });
   };
 
+  const timeStr = (timeObj) => {
+    let str;
+    if(timeObj.minutes === 1) {
+      str = `It took you ${timeObj.minutes} minute and ${timeObj.seconds} seconds!`
+    } else if (timeObj.minutes > 1) {
+      str = `It took you ${timeObj.minutes} minutes and ${timeObj.seconds} seconds!`
+    } else {
+      str = `It took you ${timeObj.seconds} seconds!`
+    }
+    return str
+  }
+
   return !endGame ? (
     <div className="box-grid">
       {boxArr.map((box) => (
@@ -126,11 +134,12 @@ return {
     <>
       <h1>You Finished!</h1>
       <p>
-        It took you{" "}
-        {parsedTime.minutes === 0
-          ? `${parsedTime.seconds } seconds!`
-          : `${parsedTime.minutes } minutes and ${parsedTime.seconds } seconds!`}
+        {timeStr(parsedTime)}
       </p>
+      <div className="btn-container">
+        <button className="btn btn-filled">Try again!</button>
+        <button className="btn btn-ghost">Reset your Scores!</button>
+      </div>
     </>
   );
 }

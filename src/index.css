@@ -47,3 +47,8 @@ body {
 .main-text-container {
   max-width: 500px;
 }
+
+.btn-container {
+  display: flex;
+  gap: 1.1rem;
+}
