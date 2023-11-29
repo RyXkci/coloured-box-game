@@ -55,7 +55,7 @@ export default function GameChoiceForm() {
             <option value="20">20</option>
           </select>
         </div>
-        <button className="game-form-button" type="submit">Go!</button>
+        <button className=" btn game-form-button" type="submit">Go!</button>
       </form>
     </div>
     <div className="main-text-container">

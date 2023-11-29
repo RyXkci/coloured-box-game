@@ -4,8 +4,8 @@
   font-weight: 400;
 
   color-scheme: light dark;
-  color: rgba(255, 255, 255, 0.87);
-  background-color: #242424;
+  color: #e4feff;
+  background-color: #334a52;
 
   font-synthesis: none;
   text-rendering: optimizeLegibility;
@@ -25,6 +25,12 @@ ul {
   list-style-type: none;
 }
 
+select {
+  background-color: #7c6583;
+  border: none;
+  border-radius: 5px;
+}
+
 body {
   /* margin: 0;
   display: flex;
@@ -39,6 +45,10 @@ body {
   font-size: 2rem;
 }
 
+.main-paragraph-text {
+  font-size: 1.3rem;
+}
+
 .main {
   height: 100svh;
   display: flex;
@@ -49,9 +59,24 @@ body {
 }
 
 .main-text-container {
-  max-width: 500px;
+  max-width: 700px;
 }
 
+.result-title {
+  font-size: 2rem;
+}
+
+.result-text {
+  font-size: 1.5rem
+}
+
+.scores-container-text {
+  font-size: 1.5rem;
+}
+
+.scores-container ul {
+  font-size: 1.3rem;
+}
 .btn-container {
   display: flex;
   gap: 1.1rem;
@@ -60,4 +85,17 @@ body {
 .btn {
   font-size: 1.2rem;
   padding: .5em 1em;
+  background-color: #00191f;
+  border: none;
+  border-radius: 5px;
+  box-shadow: .5px 5px 5px #334a52;
+}
+
+.btn-ghost {
+  border: 1px solid #00191f;
+  background: none;
+}
+
+.scores-container {
+  display: flex;
 }

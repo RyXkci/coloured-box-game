@@ -4,15 +4,9 @@ import ColouredBox from "./ColouredBox";
 import "./BoxGrid.css";
 
 //   UTILS //
-import {randomColor, randomIdx, parseSeconds, timeStr} from './utils'
+import { randomColor, randomIdx, parseSeconds, timeStr } from "./utils";
 
-
-
-
-
-
-export default function BoxGrid({ numColors, numBoxes, setGame}) {
-
+export default function BoxGrid({ numColors, numBoxes, setGame }) {
   const generateColors = () => {
     let colorsArr = [];
     for (let i = 0; i < numColors; i++) {
@@ -20,7 +14,7 @@ export default function BoxGrid({ numColors, numBoxes, setGame}) {
     }
     return colorsArr;
   };
- //Function to be run on render, generating an array of random colors the amount of numColors.
+  //Function to be run on render, generating an array of random colors the amount of numColors.
   //saved to state so it doesn't re-run it every time.
 
   const generateBoxes = () => {
@@ -42,12 +36,19 @@ export default function BoxGrid({ numColors, numBoxes, setGame}) {
   const [boxArr, setBoxArr] = useState(generateBoxes);
 
   const [endGame, setEndGame] = useState(false); //Boolean for conditional rendering
-  const [scores, setScores] = useState(sessionStorage.getItem('allScores') || []) // Empty array in which to push score objects to save in storage. Chooses storage if present
+  const [scores, setScores] = useState(
+    sessionStorage.getItem("allScores") || []
+  ); // Empty array in which to push score objects to save in storage. Chooses storage if present
 
   let [time, setTime] = useState(0); // number for interval. Holds the seconds
   const countRef = useRef(null); // Reference to clear interval
-  const [parsedTime, setParsedTime] = useState({ minutes: "", seconds: "" }); // After total seconds has been turned in to object containing minutes and seconds, it's aded here for rendering.
+  const [parsedTime, setParsedTime] = useState({
+    minutes: "",
+    seconds: "",
+    total: "",
+  }); // After total seconds has been turned in to object containing minutes and seconds, it's added here for rendering.
   const [hasStarted, setHasStarted] = useState(true); //Boolean to tell app to start or stop counter
+
 
   useEffect(() => {
     countRef.current = setInterval(() => {
@@ -61,7 +62,7 @@ export default function BoxGrid({ numColors, numBoxes, setGame}) {
     if (!isGameOver) {
       return;
     } else {
-      gameOver()
+      gameOver();
     }
   }, boxArr); // useEffect function to run on every boxArr state update.
   //Uses runValidate to check if all boxes have same background color. If they are, the game is over
@@ -75,27 +76,25 @@ export default function BoxGrid({ numColors, numBoxes, setGame}) {
         ...prevParsedTime,
         minutes: newTime.minutes,
         seconds: newTime.seconds,
+        total: newTime.total,
       }; //Saves the parsed time to state, saved to variable to run updated state to sessionSet function
-      sessionSet(newParsedTime)
+      sessionSet(newParsedTime);
       return newParsedTime;
     });
-   
-  }
+  };
 
   const sessionSet = (nums) => {
     setScores((prevScores) => {
-      const newScores = 
-      [...prevScores,
-         nums
-        ]
-         sessionStorage.setItem('allScores', JSON.stringify(newScores))
-         return newScores
-      }) // updates Scores state and sets session storage.
-    }
+      const newScores = [...prevScores, nums];
+      sessionStorage.setItem("allScores", JSON.stringify(newScores));
+      return newScores;
+    }); // updates Scores state and sets session storage.
+  };
 
   const runValidate = () => {
     return boxArr.every((box) => box.background === boxArr[0].background);
   };
+
 
   const onClick = (id) => {
     setBoxArr((prevBoxArr) => {
@@ -113,21 +112,21 @@ export default function BoxGrid({ numColors, numBoxes, setGame}) {
     });
   };
 
-// BUTTONS AND RESET LOGIC //
+  // BUTTONS AND RESET LOGIC //
 
   const tryAgain = () => {
     setEndGame((prevEndGame) => !prevEndGame);
     setBoxArr(generateBoxes());
     setTime(0);
-    setHasStarted((prevHasStarted) => !prevHasStarted)  }
+    setHasStarted((prevHasStarted) => !prevHasStarted);
+  };
 
-    const reset = () => {
-      setGame()      
-      sessionStorage.clear();
+  const reset = () => {
+    setGame();
+    sessionStorage.clear();
+  };
 
-    }
-
-    // RENDER
+  // RENDER
 
   return !endGame ? (
     <div className="box-grid">
@@ -141,21 +140,28 @@ export default function BoxGrid({ numColors, numBoxes, setGame}) {
     </div>
   ) : (
     <>
-      <h1>You Finished!</h1>
-      <p>
-        {timeStr(parsedTime)}
-      </p>
+      <h1 className="result-title">You Finished!</h1>
+      <p className="result-text">{timeStr(parsedTime)}</p>
       <div className="btn-container">
-        <button onClick={tryAgain} className="btn btn-filled">Try again!</button>
-        <button onClick ={reset} className="btn btn-ghost">Reset!</button>
+        <button onClick={tryAgain} className="btn btn-filled">
+          Try again!
+        </button>
+        <button onClick={reset} className="btn btn-ghost">
+          Reset!
+        </button>
       </div>
-      {scores.length > 1 && 
-      <div className="score-container">
-      <p className="scores-container-text">Previous Scores:</p>
-        <ul>
-          {scores.map((score) => <li key={uuid()}>{score.minutes} minutes and {score.seconds} seconds</li>)}
-        </ul>
-      </div>}
+      {scores.length > 1 && (
+        <div className="scores-container">
+          <p className="scores-container-text">All Scores:</p>
+          <ul>
+            {scores.map((score) => (
+              <li key={uuid()}>
+                {score.minutes} minutes and {score.seconds} seconds
+              </li>
+            ))}
+          </ul>
+        </div>
+      )}
     </>
   );
 }

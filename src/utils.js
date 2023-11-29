@@ -16,6 +16,7 @@ const randomColor = () => {
     const result = {
       minutes: minutes,
       seconds: seconds,
+      total: num
     };
     return result;
   };
